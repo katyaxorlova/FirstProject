@@ -390,7 +390,7 @@ bool pavardLyginimas(studentas &a, studentas &b)
 
 void spausdinimas(vector<studentas> St) {
     
-    // Open the output file for writing
+   
     #include <stdio.h>
     using namespace std;
     ofstream rez;
@@ -405,19 +405,19 @@ void spausdinimas(vector<studentas> St) {
     cout << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
     cout << pnktr << endl;
 
-    // Print the header to the output file
+   
     rez << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
     rez << pnktr << endl;
 
-    // Loop through the data and print it
+
     for (int i = 0; i < ilgis; i++) {
         cout << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
 
-        // Print the data to the output file
+
         rez << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
     }
 
-    // Close the output file
+
     rez.close();
 
     cout << "Rezultatai irasyti i faila 'rezultatai.txt'." << endl;
