@@ -6,6 +6,7 @@
 #include <stdio.h>     
 #include <stdlib.h>    
 #include <time.h> 
+#include <fstream>
 
 using std::cout;
 using std::cin;

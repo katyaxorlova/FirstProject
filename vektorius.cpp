@@ -7,6 +7,8 @@
 #include <stdio.h>     
 #include <stdlib.h>    
 #include <time.h> 
+#include <fstream>
+#include <sstream>
 
 using std::cout;
 using std::cin;
@@ -19,6 +21,8 @@ using std::sort;
 using std::vector;
 using std::left;
 using std::fixed;
+using std::ifstream;
+using std::stringstream;
 
 struct studentas 
 {
@@ -29,6 +33,8 @@ struct studentas
     float glt;
 };
 
+//nuskaito duomenis is failo
+void nuskaitymas(vector <studentas> &St);
 //tikrina ar ivesta varda/pavarde sudaro tik raides
 bool vardTikrinimas(string kint);
 //ivedami duomenis, jei neteisingi - prasoma ivesti is naujo
@@ -45,6 +51,8 @@ int suma(vector <int> nd);
 float vidurkis(vector <int> nd);
 //skaiciuoja mediana
 float mediana(vector <int> nd);
+//pasirenka arba vidurki, arba mediana
+void vidMed(vector <studentas> &St);
 //skaiciuoja galutini bala
 float galutinis(float, int egz);
 //sugeneruoja atsitiktinius duomenis
@@ -59,14 +67,68 @@ void spausdinimas(vector <studentas> St);
 void pagalbine(vector <studentas> &St);
 //tikrina pasirinkima (t/n) - taip/ne
 bool patvirtinimas();
+//isrikiuoja studentu pavardes
+void rikiavimas(vector <studentas> &St);
+//paglbine funkcija rikiavimui
+bool pavardLyginimas(studentas &a, studentas &b);
 
 int main()
 {
     vector <studentas> St;
     srand(time(0));
-    pagalbine(St);
+
+    cout << "Ar norite duomenis ivesti patys (kitu atveju duomenys bus nuskaityti is failo)? (t/n) ";
+    if(patvirtinimas()) pagalbine(St);
+    else nuskaitymas(St);
+    vidMed(St);
     spausdinimas(St);
     St.clear();
+}
+
+void vidMed(vector <studentas> &St)
+{
+    cout << "Ar norite apskaiciuoti vidurki (kitu atveju bus skaiciuojama mediana)? (t/n) ";
+
+    if(patvirtinimas())
+    { 
+        for(int j = 0; j < St.size(); j++)
+        {
+            St[j].glt = galutinis(vidurkis(St[j].nd), St[j].egz);
+        }
+    }
+    else
+    {
+        for(int j = 0; j < St.size(); j++)
+        {
+            St[j].glt = galutinis(mediana(St[j].nd), St[j].egz);
+        }
+    }
+}
+
+void nuskaitymas(vector <studentas> &St)
+{
+    stringstream buffer; 
+    ifstream duom;
+    duom.open("kursiokai.txt");
+    buffer << duom.rdbuf();
+    duom.close();
+    string eil;
+    getline(buffer, eil);
+
+    while(getline(buffer, eil))
+    {
+        studentas S;
+        stringstream duom(eil);
+        duom >> S.pavard >> S.vard;
+        int paz;
+        while(duom >> paz) S.nd.push_back(paz);
+        S.nd.pop_back();
+        S.egz = paz;
+        S.glt = 0;
+        St.push_back(S);
+        S.nd.clear();
+    }
+
 }
 
 void pagalbine(vector <studentas> &St)
@@ -127,23 +189,6 @@ void pagalbine(vector <studentas> &St)
         cout << "Ar norite ivesti dar vieno studento duomenis? (t/n) ";
         
     } while(patvirtinimas());
-
-    cout << "Ar norite apskaiciuoti vidurki (kitu atveju bus skaiciuojama mediana)? (t/n) ";
-
-    if(patvirtinimas())
-    { 
-        for(int j = 0; j < St.size(); j++)
-        {
-            St[j].glt = galutinis(vidurkis(St[j].nd), St[j].egz);
-        }
-    }
-    else
-    {
-        for(int j = 0; j < St.size(); j++)
-        {
-            St[j].glt = galutinis(mediana(St[j].nd), St[j].egz);
-        }
-    }
     
 }
 
@@ -333,20 +378,52 @@ int ilgVardas(vector <studentas> St)
     return max;
 }
 
-
-void spausdinimas(vector <studentas> St)
+void rikiavimas(vector <studentas> &St)
 {
-    int ilgis = St.size(); 
+    sort(St.begin(), St.end(), pavardLyginimas);
+}
+
+bool pavardLyginimas(studentas &a, studentas &b)
+{
+    return a.pavard < b.pavard;
+}
+
+void spausdinimas(vector<studentas> St) {
+    
+    // Open the output file for writing
+    #include <stdio.h>
+    using namespace std;
+    ofstream rez;
+    rez.open("rezultatai.txt");
+
+    int ilgis = St.size();
     string pnktr = "";
     int maxpavard = ilgPavarde(St);
     int maxvard = ilgVardas(St);
-    pnktr.append(maxpavard + maxvard + 30, '-'); 
-    cout << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl; 
+    pnktr.append(maxpavard + maxvard + 30, '-');
+
+    cout << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
     cout << pnktr << endl;
 
-    for(int i = 0; i < ilgis; i++)
-    {
+    // Print the header to the output file
+    rez << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
+    rez << pnktr << endl;
+
+    // Loop through the data and print it
+    for (int i = 0; i < ilgis; i++) {
         cout << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
 
+        // Print the data to the output file
+        rez << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
     }
+
+    // Close the output file
+    rez.close();
+
+    cout << "Rezultatai irasyti i faila 'rezultatai.txt'." << endl;
 }
+
+
+
+
+
