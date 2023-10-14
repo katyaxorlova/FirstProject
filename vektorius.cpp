@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 
+
 using std::cout;
 using std::cin;
 using std::endl;
@@ -109,7 +110,7 @@ void nuskaitymas(vector <studentas> &St)
 {
     stringstream buffer; 
     ifstream duom;
-    duom.open("kursiokai.txt");
+    duom.open("kursiokai1000000.txt");
     buffer << duom.rdbuf();
     duom.close();
     string eil;
@@ -388,22 +389,46 @@ bool pavardLyginimas(studentas &a, studentas &b)
     return a.pavard < b.pavard;
 }
 
-void spausdinimas(vector <studentas> St)
-{
-    rikiavimas(St);
-    int ilgis = St.size(); 
+void spausdinimas(vector<studentas> St) {
+        #include <stdio.h>
+    using namespace std;
+    ofstream durni, protingi;
+    durni.open("durni.txt");
+    protingi.open("protingi.txt");
+
+    int ilgis = St.size();
     string pnktr = "";
     int maxpavard = ilgPavarde(St);
     int maxvard = ilgVardas(St);
-    pnktr.append(maxpavard + maxvard + 30, '-'); 
-    cout << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl; 
-    cout << pnktr << endl;
+    pnktr.append(maxpavard + maxvard + 30, '-');
 
-    for(int i = 0; i < ilgis; i++)
-    {
-        cout << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
+    //cout << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
+    //cout << pnktr << endl;
 
+    durni << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
+    durni << pnktr << endl;
+
+    protingi << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl;
+    protingi << pnktr << endl;
+
+    for (int i = 0; i < ilgis; i++) {
+        //cout << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
+
+        if (St[i].glt < 5) {
+            durni << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
+        } else {
+            protingi << left << setw(maxpavard + 10) << St[i].pavard << setw(maxvard + 10) << St[i].vard << fixed << setprecision(2) << St[i].glt << endl;
+        }
     }
+
+    durni.close();
+    protingi.close();
+
+    cout << "Rezultatai irasyti i failus 'durni.txt' ir 'protingi.txt'." << endl;
 }
+
+
+
+
 
 
