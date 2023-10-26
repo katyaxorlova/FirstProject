@@ -9,6 +9,7 @@
 #include <time.h> 
 #include <fstream>
 #include <sstream>
+#include <ctime>
 
 
 using std::cout;
@@ -108,6 +109,9 @@ void vidMed(vector <studentas> &St)
 
 void nuskaitymas(vector <studentas> &St)
 {
+    std::clock_t start;
+    double duration;
+    start = std::clock();
     stringstream buffer; 
     ifstream duom;
     duom.open("kursiokai1000000.txt");
@@ -129,7 +133,8 @@ void nuskaitymas(vector <studentas> &St)
         St.push_back(S);
         S.nd.clear();
     }
-
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+        std::cout<<"Spausdinimo laikas: "<< duration <<" s.\n";
 }
 
 void pagalbine(vector <studentas> &St)
@@ -392,6 +397,10 @@ bool pavardLyginimas(studentas &a, studentas &b)
 void spausdinimas(vector<studentas> St) {
         #include <stdio.h>
     using namespace std;
+    std::clock_t start;
+        double duration;
+
+        start = std::clock();
     ofstream durni, protingi;
     durni.open("durni.txt");
     protingi.open("protingi.txt");
@@ -423,12 +432,7 @@ void spausdinimas(vector<studentas> St) {
 
     durni.close();
     protingi.close();
-
+    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+    std::cout<<"Spausdinimo laikas: "<< duration <<" s.\n";
     cout << "Rezultatai irasyti i failus 'durni.txt' ir 'protingi.txt'." << endl;
 }
-
-
-
-
-
-
