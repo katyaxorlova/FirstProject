@@ -14,8 +14,8 @@ int main()
     }
     vidMed(St);
     skirstymas(St, Genijai);
-    spausdinimas(St, "vargsai.txt");
-    spausdinimas(Genijai, "genijai.txt");
+    spausdinimas(St, "durni.txt");
+    spausdinimas(Genijai, "protingi.txt");
     St.clear();
     Genijai.clear();
 }
