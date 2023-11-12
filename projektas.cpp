@@ -1,8 +1,11 @@
 #include "funkcijos.h"
 
+
+
 int main()
 {
     vector <studentas> St;
+    vector <studentas> Vargsai;
     vector <studentas> Genijai;
     string failas = "";
     srand(time(0));
@@ -13,13 +16,23 @@ int main()
         nuskaitymas(St, failas);
     }
     vidMed(St);
-    skirstymas(St, Genijai);
-    spausdinimas(St, "vargsai.txt");
-    spausdinimas(Genijai, "genijai.txt");
+    cout << "Ar norite studentu rusiavima vykdyti 1 - aja strategija (kitu atveju bus vykdoma 2 - oji strategija)? (t/n) ";
+    if(patvirtinimas()) {
+        skirstymas1(St, Vargsai, Genijai);
+        spausdinimas(Vargsai, "vargsai.txt");
+        spausdinimas(Genijai, "genijai.txt");
+    }
+
+    else {
+        cout << "Ar norite naudoti optimizuota strategija (kitu atveju bus naudojama neoptimizuota strategija)? (t/n) ";
+        if(patvirtinimas()) skirstymas2(St, Genijai);
+        else skirstymas3(St, Genijai); //neoptimizuotas
+        spausdinimas(St, "vargsai.txt");
+        spausdinimas(Genijai, "genijai.txt");
+    }
     St.clear();
+    Vargsai.clear();
     Genijai.clear();
 }
-//    ./myprogram
-
 
 

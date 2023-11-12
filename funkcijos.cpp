@@ -353,7 +353,7 @@ void spausdinimas(vector <studentas> St, string failas)
 int pasirinkimas()
 {
     cout << "Kuri faila norite naudoti? (1 - 5)" << endl;
-    cout << "1 - studentai1000.txt; " << endl << "2 - studentai10000.txt;" << endl << "3 - studentai100000.txt;"  << endl;
+    cout << "1 - studentai1000.txt; " << endl << "2 - studentai10000.txt;" << endl << "3 - studentai100000.txt;" << endl;
     int skaicius = skIvedimas();
     return skaicius;
 }
@@ -371,10 +371,10 @@ bool skGenTikrinimas(string laik)
             cout << "Klaida! Turite ivesti skaiciu" << endl;
             break;
         }
-        else if (teisingas == true && (stoi(laik) < 1 || stoi(laik) > 3))
+        else if (teisingas == true && (stoi(laik) < 1 || stoi(laik) > 5))
         {
             teisingas = false;
-            cout << "Klaida! Skaicius turi buti is intervalo [1-3]" << endl;
+            cout << "Klaida! Skaicius turi buti is intervalo [1-5]" << endl;
         }
         
     }
@@ -404,7 +404,6 @@ void generavimas(int sk, string &failas)
     if(sk == 1) n = 1000;
     else if(sk == 2) n = 10000;
     else if(sk == 3) n = 100000;
-    
 
 
     failas = "studentai" + to_string(n) + ".txt";
@@ -427,7 +426,30 @@ void generavimas(int sk, string &failas)
 
 }
 
-void skirstymas(vector <studentas> &St, vector <studentas> &Genijai)
+void skirstymas1(vector <studentas> St, vector <studentas> &Vargsai, vector <studentas> &Genijai)
+{
+    pradzia = std::chrono::steady_clock::now();
+
+    copy_if(St.begin(), St.end(), back_inserter(Genijai), [](studentas const& St) {return St.glt >= 5;});
+    copy_if(St.begin(), St.end(), back_inserter(Vargsai), [](studentas const& St) {return St.glt < 5;});
+
+    double pabaiga = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - pradzia).count() / 1000.0;
+    cout << endl <<"Sugaistas laikas studentams suskirstyti (1 - oji strategija): " << pabaiga << " s" << endl << endl;  
+}
+
+void skirstymas2(vector <studentas> &St, vector <studentas> &Genijai)
+{
+    pradzia = std::chrono::steady_clock::now();  
+
+    auto it = stable_partition(St.begin(), St.end(), [](studentas const& St) {return St.glt < 5;});
+    Genijai.assign(it, St.end());
+    St.erase(it, St.end());
+
+    double pabaiga = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - pradzia).count() / 1000.0;
+    cout << endl <<"Sugaistas laikas studentams suskirstyti (2 - oji optimizuota strategija): " << pabaiga << " s" << endl << endl;    
+}
+
+void skirstymas3(vector <studentas> &St, vector <studentas> &Genijai)
 {
     long int n = St.size();
     pradzia = std::chrono::steady_clock::now();
@@ -436,6 +458,6 @@ void skirstymas(vector <studentas> &St, vector <studentas> &Genijai)
     St.erase(remove_if(St.begin(), St.end(), [](studentas const& St) {return St.glt >= 5;}),St.end());
 
     double pabaiga = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - pradzia).count() / 1000.0;
-    cout << endl <<"Sugaistas laikas studentams suskirstyti: " << pabaiga << " s" << endl << endl;  
+    cout << endl <<"Sugaistas laikas studentams suskirstyti(2 - oji strategija): " << pabaiga << " s" << endl << endl;  
 }
 

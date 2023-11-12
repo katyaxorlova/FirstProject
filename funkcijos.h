@@ -89,4 +89,6 @@ int skIvedimas();
 //tikrina generavimui ivesta skaiciu
 bool skGenTikrinimas(string laik);
 //isskirsto studentus pagal galutini bala
-void skirstymas(vector <studentas> &St, vector <studentas> &Genijai);
+void skirstymas1(vector <studentas> St, vector <studentas> &Vargsai, vector <studentas> &Genijai);
+void skirstymas2(vector <studentas> &St, vector <studentas> &Genijai);
+void skirstymas3(vector <studentas> &St, vector <studentas> &Genijai);
